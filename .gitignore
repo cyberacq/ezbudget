@@ -1,0 +1,15 @@
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+
+# Local backup copies
+*.ezbd
+*.json
+
+# Temp / test builds
+*-test.html
