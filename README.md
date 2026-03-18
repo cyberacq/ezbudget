@@ -10,7 +10,7 @@ Features
 - Budget Planning with cash flow projections
 - Vacation pay accrual, tax estimator
 - All data stays on your device
-- Supporting Canada, US, UK and Australian currencies - more planned in the future
+- Supporting Canadian, US, UK and Australian currencies - more planned in the future
 
 Privacy
 EZBudget runs entirely in your browser. Nothing is sent to any server.
