@@ -977,7 +977,7 @@ input[type=number]{-moz-appearance:textfield}
               <div class="fg" id="est-rate-wrap"><label id="est-rate-lbl">Hourly Rate $</label><input type="number" step="0.01" id="est-rate" placeholder="0.00" oninput="saveEstRates();calcEstimate()"></div>
               <div class="fg" id="est-hours-wrap"><label id="est-hours-lbl">Hours Worked</label><input type="number" step="0.25" id="est-hours" placeholder="0" oninput="calcEstimate()"></div>
               <div class="fg" id="est-units-wrap" style="display:none"><label id="est-units-lbl">Units</label><input type="number" step="1" id="est-units" placeholder="0" oninput="calcEstimate()"></div>
-              <div id="est-wait-row" style="display:none;grid-column:span 2;display:none;display:contents"><div class="fg"><label>Wait Time (hrs)</label><input type="number" step="0.25" id="est-wait-hrs" placeholder="0" oninput="calcEstimate()"></div><div class="fg"><label>Wait Rate $/h</label><input type="number" step="0.01" id="est-wait-rate" placeholder="same as main rate" oninput="saveEstRates();calcEstimate()"></div></div>
+              <div id="est-wait-row" style="display:none;grid-column:span 2"><div class="fg"><label>Wait Time (hrs)</label><input type="number" step="0.25" id="est-wait-hrs" placeholder="0" oninput="calcEstimate()"></div><div class="fg"><label>Wait Rate $/h</label><input type="number" step="0.01" id="est-wait-rate" placeholder="same as main rate" oninput="saveEstRates();calcEstimate()"></div></div>
               <div class="fg" id="est-extras-wrap"><label>Extras / Bonus $</label><input type="number" step="0.01" id="est-extras" placeholder="0.00" oninput="calcEstimate()"></div>
             </div>
             <div id="est-perjob-entries" style="display:none;margin-bottom:10px"></div>
@@ -5751,9 +5751,9 @@ function calcTfsaUsedRoom(a){
     const d=new Date(r.date+'T12:00:00');
     if(d<yearStart) return;
     // Deposits to TFSA: toAcct or chqAcct receiving
-    if(r.toAcct===acctId) contributed+=Object.values(r).filter(v=>typeof v==='number'&&v>0).reduce((s,v)=>s+v,0)||0;
+    if(r.toAcct===acctId) contributed+=parseFloat(r.amount)||0;
     // Withdrawals from TFSA: fromAcct or negative entry
-    if(r.fromAcct===acctId||r.chqAcct===acctId) withdrawn+=Object.values(r).filter(v=>typeof v==='number'&&v>0).reduce((s,v)=>s+v,0)||0;
+    if(r.fromAcct===acctId||r.chqAcct===acctId) withdrawn+=parseFloat(r.amount)||0;
   });
   // Also include manually entered ytdContrib as override if set
   const manual=parseFloat(a.ytdContrib)||0;
@@ -10925,7 +10925,7 @@ function getDebtLevel(){
   // ── Debt-to-income ratio (all debts, annualised) ────────────────────────
   // Use up to 6 most recent income records to estimate monthly take-home
   const recentInc = income.slice().sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,6);
-  const payFreq   = userSettings.payFrequency||'biweekly';
+  const payFreq   = userSettings.payFreq||'biweekly';
   const perdsPerMo= payFreq==='weekly'?4.33:payFreq==='monthly'?1:payFreq==='semimonthly'?2:2.17;
   const avgPerPd  = recentInc.length ? recentInc.reduce((s,r)=>s+(parseFloat(r.net)||0),0)/recentInc.length : 0;
   const monthlyNet= avgPerPd * perdsPerMo;
